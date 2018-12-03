@@ -135,6 +135,8 @@ def preview():
 		redirect('preview')
 
 	if request.method == 'GET':
+		print(str(session.items()))
+		session['message'] = message
 		return render_template('preview.html', message=message)
 	if request.method == 'POST':
 		# Translate text and send email 
