@@ -8,6 +8,7 @@ from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from docx import Document
+from time import sleep
 
 UPLOAD_FOLDER = 'usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
@@ -15,7 +16,7 @@ ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 app = Flask(__name__)
 # Configs
 app.secret_key = urandom(16)
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ## For testing
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 app.config['SESSION_TYPE'] = 'filesystem'
@@ -116,11 +117,13 @@ def translate():
 		# Save translated message as a cookie
 		try:
 			text = get_translated(text)
+			text = text
 		except Exception:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
 
 		session['message'] = {'text': text, 'addressee': addressee, 'addresser': addresser, 'file': filename}
+		sleep(3)
 		return redirect('preview')
 	if request.method == 'GET':
 		return render_template('translate.html')
@@ -129,7 +132,6 @@ def translate():
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
 	message = session['message']
-
 	if request.method == 'GET':
 		print(str(session.items()))
 		return render_template('preview.html', message=message)
