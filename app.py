@@ -8,7 +8,6 @@ from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
 from docx import Document
-from time import sleep
 
 UPLOAD_FOLDER = 'usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
@@ -123,7 +122,6 @@ def translate():
 			return redirect(url_for('index'))
 
 		session['message'] = {'text': text, 'addressee': addressee, 'addresser': addresser, 'file': filename}
-		sleep(3)
 		return redirect('preview')
 	if request.method == 'GET':
 		return render_template('translate.html')
@@ -131,7 +129,11 @@ def translate():
 
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
-	message = session['message']
+	try:
+		message = session['message']
+	except KeyError:
+		redirect('preview')
+		
 	if request.method == 'GET':
 		print(str(session.items()))
 		return render_template('preview.html', message=message)
