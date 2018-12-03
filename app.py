@@ -106,6 +106,7 @@ def translate():
 	if request.method == 'GET':
 		return render_template('translate.html')
 
+
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
 	message = session['message']
@@ -126,6 +127,7 @@ def preview():
 
 		flash('Successfully sent!')
 		return redirect(url_for('index'))
+
 
 if __name__ == '__main__':
 	app.run()
