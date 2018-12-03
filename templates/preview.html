@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block main %}
+	<h2>Preview your message</h2>
+	<div class="preview">
+		<form id="preview_form" action="\preview" method="POST">
+		<div class="form-group">
+			<label for="translated_text">text to be translated</label>
+			<textarea disabled required class="form-control" rows='5' placeholder='Hello, friend!' id="translated_text" name="translated_text">{{ message['text'] }}</textarea>
+		</div>
+		<div class="form-group">
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+    				<span class="input-group-text" id="addresseeAddon">addressee</span>
+ 				</div>
+				<input disabled required multiple class="form-control" id="addressee" name="addressee" placeholder='example@example.com' ariadescribedby="addresseeAddon" type="email" value="{{ message['addressee'] }}">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="from">from</label>
+			<input disabled required class="form-control" id="addresser" name="addresser" placeholder='John Harvard' ariadescribedby="privacyText" type="text" value="{{ message['addresser'] }}">
+		</div>
+		<div class="form-group">
+			<small class="form-text">No preview for attachments</small>
+		</div>
+		<button class="btn btn-primary" type='submit'>Send</button>
+		<a href="/index">Cancel</a>
+	</form>
+	</div>
+{% endblock %}

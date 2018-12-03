@@ -1,0 +1,7 @@
+venv
+*.pyc
+.DS_Store
+usrfiles/*.txt
+usrfiles/*.docx
+
+.gitsecret/keys/random_seed

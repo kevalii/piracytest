@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+{% block main %}
+	<h5>Arrrr! Send a parcel t' ye maties!</h5>
+	<form id="translate_form" action="\translate" enctype=multipart/form-data method="POST">
+		<div class="form-group">
+			<label for="translation_text">text to be translated</label>
+			<textarea required class="form-control" rows='5' placeholder='Hello, friend!' id="translation_text" name="translation_text"></textarea>
+		</div>
+		<div class="form-group">
+			<div class="input-group mb-3">
+  				<div class="input-group-prepend">
+    				<span class="input-group-text" id="addresseeAddon">addressee</span>
+ 				</div>
+				<input required multiple class="form-control" id="addressee" name="addressee" placeholder='example@example.com' ariadescribedby="addresseeAddon" type="email">
+			</div>
+		</div>
+		<div class="form-group">
+			<label for="from">from</label>
+			<input required class="form-control" id="addresser" name="addresser" placeholder='John Harvard' ariadescribedby="privacyText" type="text">
+			<small class="form-text" id="privacyText">We'll ne'er share any o' this information with any third parties.</small>
+		</div>
+		<div class="form-group">
+			<label for="document_upload">upload a file to attach if you please</label>
+			<input class="form-control-file" id="document_upload" name="document_upload" ariadescribedby="documentAddon" type="file">
+			<small class="form-text" id="documentAddon">Must be a .txt and .docx file</small>
+		</div>
+		<button class="btn btn-primary" type='submit'>Send</button>
+	</form>
+
+{% endblock %}

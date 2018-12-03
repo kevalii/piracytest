@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block main %}
+	<h2><strong>Ahoy me bucko!</strong></h2>
+	<ol>
+		<li>Write a message</li>
+		<li>Specify an email</li>
+		<li>Add yer name</li>
+		<li>Attach a file (if ye'd like)</li>
+		<li>Fire away</li>
+	</ol>
+	<h4>Check out some of the translations other people have sent!</h4>
+	<table class="table table-light table-striped table-bordered">
+		<thead class="thead-dark">
+	    	<tr>
+			    <th scope="col">Translation</th>
+			    <th scope="col">Time sent</th>
+	    	</tr>
+	    </thead>
+	    <tbody>
+	    	{% for message in data %}
+		    <tr>
+		    	<td>{{ message[0] }}</td>
+		    	<td>{{ message[1] }}</td>
+		    </tr>
+		    {% endfor %}
+	    </tbody>
+	</table>
+{% endblock %}
