@@ -116,7 +116,6 @@ def translate():
 		# Save translated message as a cookie
 		try:
 			text = get_translated(text)
-			text = text
 		except Exception:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
@@ -129,11 +128,13 @@ def translate():
 
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
+	# Ensures the cookie has loaded
+	message = None
 	try:
 		message = session['message']
 	except KeyError:
 		redirect('preview')
-		
+
 	if request.method == 'GET':
 		print(str(session.items()))
 		return render_template('preview.html', message=message)

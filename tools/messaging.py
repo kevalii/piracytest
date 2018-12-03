@@ -32,6 +32,7 @@ def compose_message(recipients, subject, body, attachmentpath=None):
 def send_message(msgs):
 	# Connect to Gmail's smtp server
 	server = smtplib.SMTP('gmail-smtp-in.l.google.com', 25)
+	print(server)
 	server.starttls()
 	server.ehlo("book-o-piracy.com")
 	for msg in msgs:
@@ -46,5 +47,5 @@ def send_message(msgs):
 	server.quit()
 
 # Testing
-#msg = compose_message("alexrankine@college.harvard.edu", "hello", "testing", "usrfiles/ex.docx")
+#msg = compose_message(["alexrankine@college.harvard.edu"], "hello", "testing", None)
 #send_message(msg)
