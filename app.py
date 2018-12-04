@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.secret_key = urandom(16)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 # Cookie-related stuff
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -28,7 +28,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Production env database setup
-#heroku = Heroku(app)
+heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 # Easiest to include these functions in the main app.py
