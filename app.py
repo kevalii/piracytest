@@ -36,7 +36,7 @@ db = SQLAlchemy(app)
 def get_docx(filename):
 	doc = Document(f'{UPLOAD_FOLDER}/{filename}')
 	for para in doc.paragraphs:
-		para.text = get_translated(para.text)
+		para.text = para.text
 	doc.save(f'{UPLOAD_FOLDER}/{filename}')
 
 
@@ -46,7 +46,7 @@ def get_text(filename):
 		text = file.read()
 		file.seek(0)
 		print(text)
-		file.write(get_translated(text))
+		file.write(text)
 		file.truncate()
 
 
