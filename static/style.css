@@ -61,3 +61,10 @@ table
 	background-color: #ff7f00;
 	padding: 3%;
 }
+
+#format-preview
+{
+	border-radius: 25px;
+	background-color: #bc742d;
+	padding: 3%;
+}

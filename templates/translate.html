@@ -5,9 +5,16 @@
 		<div class="form-group">
 			<label for="translation_text">text to be translated</label>
 			<textarea required class="form-control" rows='5' placeholder='Hello, friend!' id="translation_text" name="translation_text"></textarea>
+			<small class="form-text">Format your message</small>
 			<button class="btn btn-primary" type="button" value="bold"><span class="oi oi-bold"></span></button>
 			<button class="btn btn-primary" type="button" value="italics"><span class="oi oi-italic"></span></button>
 			<button class="btn btn-primary" type="button" value="underline"><span class="oi oi-underline"></span></button>
+			<small class="form-text">Consider uploading an attachment instead if writing a longer message!</small>
+		</div>
+		<div class="form-group">
+			 <label for="format-preview">preview formatting</label>
+			<div id="format-preview">
+			</div>
 		</div>
 		<div class="form-group">
 			<div class="input-group mb-3">
@@ -29,5 +36,5 @@
 		</div>
 		<button class="btn btn-primary" type='submit'>Send</button>
 	</form>
-	<script src="static/editor.js?v=1.2.2"></script>
+	<script src="static/editor.js?v=1.3.6.5"></script>
 {% endblock %}

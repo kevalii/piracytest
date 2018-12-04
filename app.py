@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.secret_key = urandom(16)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 # Cookie-related stuff
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -28,7 +28,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Production env database setup
-heroku = Heroku(app)
+#heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 # Easiest to include these functions in the main app.py
@@ -36,7 +36,7 @@ db = SQLAlchemy(app)
 def get_docx(filename):
 	doc = Document(f'{UPLOAD_FOLDER}/{filename}')
 	for para in doc.paragraphs:
-		para.text = para.text
+		para.text = get_translated(para.text)
 	doc.save(f'{UPLOAD_FOLDER}/{filename}')
 
 
@@ -45,10 +45,12 @@ def get_text(filename):
 	with open(f'{UPLOAD_FOLDER}/{filename}', 'r+') as file:
 		text = file.read()
 		file.seek(0)
-		print(text)
-		file.write(text)
+		file.write(get_translated(text))
 		file.truncate()
 
+
+def escape(text):
+	return text.replace('\n', '<br>')
 
 def check_file(filename):
 	ext = path.splitext(filename)[1]
@@ -79,7 +81,7 @@ def index():
 	sorted_query = Message.query.order_by(Message.time.desc()).all()
 	data = list()
 	for message in sorted_query:
-		data.append((message.translation, str(message.time)))
+		data.append((Markup(message.translation), str(message.time)))
 	# Clear message cookie
 	session.pop('message', None)
 	return render_template('index.html', data=data)
@@ -124,8 +126,8 @@ def translate():
 
 		# Save translated message as a cookie
 		try:
-			text = get_translated(text)
-		except Exception:
+			text = get_translated(escape(text))
+		except KeyError:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
 		session['message'] = {'text': text, 'addressee': addressee, 'addresser': addresser, 'file': filename}

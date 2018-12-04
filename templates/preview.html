@@ -3,35 +3,41 @@
 	<h2>Preview your message</h2>
 	<div class="preview">
 		<form id="preview_form" action="\preview" method="POST">
-		<div class="form-group">
-			<label for="translated_text">text to be translated</label>
-			<textarea required class="form-control" rows='5' placeholder='Hello, friend!' id="translated_text" name="translated_text">{{ message['text'] }}</textarea>
-		</div>
-		<div class="form-group">
-			<div class="input-group mb-3">
-  				<div class="input-group-prepend">
-    				<span class="input-group-text" id="addresseeAddon">addressee</span>
- 				</div>
-				<input required multiple class="form-control" id="addressee" name="addressee" placeholder='example@example.com' ariadescribedby="addresseeAddon" type="email" value="{{ message['addressee'] }}">
+			<div class="form-group">
+				<label for="translated_text">text to be translated</label>
+				<textarea required class="form-control" rows='5' placeholder='Hello, friend!' id="translation_text" name="translated_text">{{ message['text'] }}</textarea>
 			</div>
-		</div>
-		<div class="form-group">
-			<label for="from">from</label>
-			<input required class="form-control" id="addresser" name="addresser" placeholder='John Harvard' ariadescribedby="privacyText" type="text" value="{{ message['addresser'] }}">
-		</div>
-		<div class="form-group">
-			<div class="input-group mb-3">
-  				<div class="input-group-prepend">
-    				<span class="input-group-text" id="fileAddon">file</span>
- 				</div>
-				<input readonly required multiple class="form-control" id="file" name="file" placeholder='selected file' ariadescribedby="fileAddon" type="text" value="{{ message['file'] }}">
+			<div class="form-group">
+				 <label for="format-preview">preview formatting</label>
+				<div id="format-preview">
+				</div>
 			</div>
-		</div>
-		<div class="form-group">
-			<small class="form-text">No translation preview for attachments</small>
-		</div>
-		<button class="btn btn-primary" type='submit'>Send</button>
-		<a href="/">Cancel</a>
-	</form>
+			<div class="form-group">
+				<div class="input-group mb-3">
+	  				<div class="input-group-prepend">
+	    				<span class="input-group-text" id="addresseeAddon">addressee</span>
+	 				</div>
+					<input required multiple class="form-control" id="addressee" name="addressee" placeholder='example@example.com' ariadescribedby="addresseeAddon" type="email" value="{{ message['addressee'] }}">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="from">from</label>
+				<input required class="form-control" id="addresser" name="addresser" placeholder='John Harvard' ariadescribedby="privacyText" type="text" value="{{ message['addresser'] }}">
+			</div>
+			<div class="form-group">
+				<div class="input-group mb-3">
+	  				<div class="input-group-prepend">
+	    				<span class="input-group-text" id="fileAddon">file</span>
+	 				</div>
+					<input readonly required multiple class="form-control" id="file" name="file" placeholder='selected file' ariadescribedby="fileAddon" type="text" value="{{ message['file'] }}">
+				</div>
+			</div>
+			<div class="form-group">
+				<small class="form-text">No translation preview for attachments</small>
+			</div>
+			<button class="btn btn-primary" type='submit'>Send</button>
+			<a href="/">Cancel</a>
+		</form>
+		<script src="static/editor.js?v=1.3.6.5"></script>
 	</div>
 {% endblock %}

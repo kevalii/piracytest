@@ -1,9 +1,21 @@
-$(document).ready(function(){
-	$('button').click(function(){
-		getActiveText($(this).val())
+// Sets up editor and dynamic preview
+$(document).ready(function() {
+	$('button').click(function() {
+		getActiveText($(this).val());
 		});
+	$('#translation_text').keyup(function() {
+		updatePreview()
+	});
+	updatePreview()
 });
 
+function updatePreview()
+{
+	var text = $('#translation_text').val();
+	// Replace newlines with <br>
+	text = '<p>' + text.replace(/\n/g, '<br>') + '</p>'
+	$('#format-preview').html(text)
+}
 function getActiveText(arg)
 {
 	// Derivative of first solution to https://stackoverflow.com/questions/5379120/get-the-highlighted-selected-text
@@ -36,6 +48,7 @@ function getActiveText(arg)
 			break;
 	}
 	activeText.val(beforeActiveText + text + afterActiveText);
+	updatePreview()
 }
 
 // Modifying functions
