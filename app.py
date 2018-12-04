@@ -80,6 +80,7 @@ def index():
 	data = list()
 	for message in sorted_query:
 		data.append((message.translation, str(message.time)))
+	# Clear message cookie
 	session.pop('message', None)
 	return render_template('index.html', data=data)
 
