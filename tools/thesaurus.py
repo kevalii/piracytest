@@ -1,4 +1,13 @@
-### Ignore
+''' LEGACY COMPONENT
+Early on during the project, I wanted to avoid having to shell out for a translation API by
+attempting to create my own translation tool. The premise was that for each word in a message,
+we would query a thesaurus API and replace the word with the first word in stored in the 
+response JSON. The response would be an archaic and awkward, but still understandable "thesaurized" 
+version of the same sentence. In fact, this goal was the inspiration for the project's first name: absurdspeak.
+Of course words have drastically different synonymns depending on whether they're a  noun, verb, 
+etc so the program returned rather crude translations. In the end, it become much for the scope of the project.
+This will definitely be reworked outside the context of this project using nltk or something.
+'''
 import requests
 
 ignored = ['a', 'the', 'this', 'that', 'will', 'there', 'they\'re', 'them' 'is', 'was', 'he', 'she', 'him', 'his' 'it', 'we', 'our', 'you', 'your', 'be', 'or', 'and', 'but', 'had', 'an', 'some', 'to', 'so', 'at', 'have', 'up', 'before', 'against', 'inside', 'by', 'beyond', 'on', 'past', 'prior', 'with', 'via', 'since']
@@ -24,5 +33,5 @@ def parse_word(msg):
 			word += mark
 		thesaurusized.append(word)
 	return ' '.join(thesaurusized)
-
+# Tests
 print(parse_word('You know I am not used to such ceremonies, and there was something ominous in the atmosphere.'))
