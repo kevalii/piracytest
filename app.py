@@ -135,14 +135,17 @@ def translate():
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
 	# Ensures the cookie has loaded
-	try:
-		message = session['message']
-	except KeyError:
-		redirect('preview')
-
 	if request.method == 'GET':
+		try:
+			message = session['message']
+		except KeyError:
+			return redirect('preview', code=307)
 		return render_template('preview.html', message=message)
 	if request.method == 'POST':
+		try:
+			message = session['message']
+		except KeyError:
+			return redirect('preview', code=307)
 		# Translate text and send email 
 		text = message['text']
 		msg = compose_message([message['addressee']], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
