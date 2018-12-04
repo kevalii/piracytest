@@ -4,7 +4,7 @@ from os import environ
 from os.path import basename
 from base64 import b64encode, decode
 
-sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+sg = sendgrid.SendGridAPIClient(apikey=environ.get('SENDGRID_API_KEY'))
 
 def send_message(recipients, subject, body, attachmentpath=None):
 	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
