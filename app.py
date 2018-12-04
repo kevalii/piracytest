@@ -2,7 +2,7 @@ from flask import Flask, session, render_template, request, Markup, redirect, ur
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
-from tools.messaging import compose_message, send_message
+from tools.messaging import send_message
 from tools.translate import get_translated
 from tools.doc import get_docx, get_text
 from tempfile import mkdtemp
