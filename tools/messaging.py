@@ -1,4 +1,17 @@
-from email.mime.multipart import MIMEMultipart
+import sendgrid
+import os
+from sendgrid.helpers.mail import *
+
+sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
+
+def send_message(recipients, subject, body, attachmentpath=None):
+	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
+	mail = Mail("pirate-parceler@book-o-piracy.com", subject, recipients[0], body)
+	response = sg.client.mail.send.post(request_body=mail.get())
+	print(response.status_code)
+	print(response.body)
+	print(response.headers)
+'''from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 from email import encoders
@@ -48,4 +61,4 @@ def send_message(msgs):
 
 # Testing
 #msg = compose_message(["alexrankine@college.harvard.edu"], "hello", "testing", None)
-#send_message(msg)
+#send_message(msg)'''
