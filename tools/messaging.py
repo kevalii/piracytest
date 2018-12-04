@@ -6,7 +6,7 @@ sg = sendgrid.SendGridAPIClient(apikey=os.environ.get('SENDGRID_API_KEY'))
 
 def send_message(recipients, subject, body, attachmentpath=None):
 	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
-	mail = Mail("pirate-parceler@book-o-piracy.com", subject, recipients[0], body)
+	mail = Mail(Email("pirate-parceler@book-o-piracy.com"), subject, Email(recipients[0]), body)
 	response = sg.client.mail.send.post(request_body=mail.get())
 	print(response.status_code)
 	print(response.body)
