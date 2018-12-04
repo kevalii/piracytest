@@ -45,6 +45,7 @@ def get_text(filename):
 	with open(f'{UPLOAD_FOLDER}/{filename}', 'r+') as file:
 		text = file.read()
 		file.seek(0)
+		print(text)
 		file.write(get_translated(text))
 		file.truncate()
 
