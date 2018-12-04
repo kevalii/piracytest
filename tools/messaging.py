@@ -11,6 +11,7 @@ def send_message(recipients, subject, body, attachmentpath=None):
 	mail = Mail(Email("pirate-parceler@book-o-piracy.com"), subject, Email(recipients[0]), body)
 
 	if attachmentpath:
+		attachment = Attachment()
 		filename = basename(attachmentpath)
 		with open(attachmentpath, 'rb') as file:
 			content = file.read()
