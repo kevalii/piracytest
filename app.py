@@ -1,9 +1,11 @@
 from flask import Flask, session, render_template, request, Markup, redirect, url_for, flash
+from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from tools.messaging import compose_message, send_message
 from tools.translate import get_translated
 from tools.doc import get_docx, get_text
+from tempfile import mkdtemp
 from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
@@ -13,12 +15,17 @@ UPLOAD_FOLDER = 'usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 
 app = Flask(__name__)
-# Configs
+#### CONFIGS ####
 app.secret_key = urandom(16)
-# app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-## For testing
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+# Local db for testing
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+# Cookie-related stuff
+app.config["SESSION_FILE_DIR"] = mkdtemp()
+app.config["SESSION_PERMANENT"] = False
 app.config['SESSION_TYPE'] = 'filesystem'
+#### END CONFIGS ####
+Session(app)
 
 # Production env database setup
 heroku = Heroku(app)
@@ -42,6 +49,12 @@ def get_text(filename):
 		file.truncate()
 
 
+def check_file(filename):
+	ext = path.splitext(filename)[1]
+	if ext in ALLOWED_EXTENSIONS:
+		return ext
+	return False
+
 
 # Message model
 class Message(db.Model):
@@ -57,13 +70,6 @@ class Message(db.Model):
 
 	def __repr__(self):
 		return f'Message sent at {str(self.time)}'
-	
-
-def check_file(filename):
-	ext = path.splitext(filename)[1]
-	if ext in ALLOWED_EXTENSIONS:
-		return ext
-	return False
 
 
 @app.route('/')
@@ -119,8 +125,8 @@ def translate():
 		except Exception:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
-
 		session['message'] = {'text': text, 'addressee': addressee, 'addresser': addresser, 'file': filename}
+
 		return redirect('preview')
 	if request.method == 'GET':
 		return render_template('translate.html')
@@ -135,14 +141,11 @@ def preview():
 		redirect('preview')
 
 	if request.method == 'GET':
-		print(str(session.items()))
-		session['message'] = message
 		return render_template('preview.html', message=message)
 	if request.method == 'POST':
 		# Translate text and send email 
-		print(str(session.items()))
 		text = message['text']
-		msg = compose_message([message['addressee']], 'parcel from ' + message['addresser'], text, f'{UPLOAD_FOLDER}/{message["file"]}' if message['file'] else None)
+		msg = compose_message([message['addressee']], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
 		send_message(msg)
 
 		# Commit new Message to database
