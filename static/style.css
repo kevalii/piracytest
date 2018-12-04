@@ -53,3 +53,10 @@ table
 	background-color: #f27d2b !important;
 	border-color: #f27d2b !important;
 }
+
+.flashed
+{
+	border-radius: 25px;
+	background-color: #ffe187;
+	padding: 2%;
+}
