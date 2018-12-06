@@ -9,8 +9,8 @@ sg = sendgrid.SendGridAPIClient(apikey=environ.get('SENDGRID_API_KEY'))
 def send_message(recipients, subject, body, attachmentpath=None):
 	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
 	mail = Mail()
-	mail.set_from(Email("pirate-parceler@book-o-piracy.com"))
-	mail.set_subject(subject)
+	mail.subject = subject
+	email Email("pirate-parceler@book-o-piracy.com")
 
 	personalization = Personalization()
 	for recipient in recipients:
@@ -18,7 +18,7 @@ def send_message(recipients, subject, body, attachmentpath=None):
 
 	mail.add_personalization(personalization)
 	mail.add_content(body)
-	
+
 	if attachmentpath:
 		attachment = Attachment()
 		filename = basename(attachmentpath)
