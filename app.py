@@ -138,7 +138,7 @@ def preview():
 		# Send email 
 		text = message['text']
 		try:
-			send_message(message['addressee'], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
+			send_message(message['addressee'], 'parcel from ' + message['addresser'], text, path.join(app.config['UPLOAD_FOLDER'], message['file']) if message['file'] is not None else None)
 		except:
 			flash('Could not send message!')
 			return redirect(url_for('index'))
