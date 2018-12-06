@@ -10,7 +10,7 @@ def send_message(recipients, subject, body, attachmentpath=None):
 	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
 	mail = Mail()
 	mail.subject = subject
-	email = Email("pirate-parceler@book-o-piracy.com")
+	mail.from_email = Email("pirate-parceler@book-o-piracy.com")
 
 	personalization = Personalization()
 	for recipient in recipients:
