@@ -1,11 +1,11 @@
 from docx import Document
-
+from tools.translate import get_translated
 # Extract and translate most text of a .txt file
 def get_docx(filename):
 	print(filename)
 	doc = Document(filename)
 	for para in doc.paragraphs:
-		para.text = get_translated(escape(para.text).replace('<br>'), '\n')
+		para.text = get_translated(escape(para.text).replace('<br>', '\n'))
 	doc.save(filename)
 
 

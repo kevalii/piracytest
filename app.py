@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 app.secret_key = urandom(16)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 # Cookie-related stuff
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
@@ -99,11 +99,14 @@ def translate():
 				filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 				file.save(filepath)
 				# Translate contents of file
-				if ext == '.docx':
-					get_docx(filepath)
-				if ext == '.txt':
-					get_text(filepath)
-
+				try: 
+					if ext == '.docx':
+						get_docx(filepath)
+					if ext == '.txt':
+						get_text(filepath)
+				except:
+					flash('Failed to translate document!')
+					return redirect(url_for('index'))
 		# Handling multiple recipients
 		recipients = [recipient.strip() for recipient in addressee.split(',')]
 
