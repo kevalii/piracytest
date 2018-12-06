@@ -91,17 +91,18 @@ def translate():
 		filename = None
 
 		if file:
+			filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 			# Check if extension of file is valid
 			ext = check_file(file.filename)
 			if ext and file.filename != '':
 				# Save file
 				filename = secure_filename(file.filename)
-				file.save(path.join(app.config['UPLOAD_FOLDER'], filename))
+				file.save(filepath)
 				# Translate contents of file
 				if ext == '.docx':
-					get_docx(filename)
+					get_docx(filepath)
 				if ext == '.txt':
-					get_text(filename)
+					get_text(filepath)
 
 		# Handling multiple recipients
 		recipients = [recipient.strip() for recipient in addressee.split(',')]
