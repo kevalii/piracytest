@@ -94,9 +94,9 @@ def translate():
 			# Check if extension of file is valid
 			ext = check_file(file.filename)
 			if ext and file.filename != '':
-				filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 				# Save file
 				filename = secure_filename(file.filename)
+				filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 				file.save(filepath)
 				# Translate contents of file
 				if ext == '.docx':
