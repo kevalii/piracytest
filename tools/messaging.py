@@ -31,7 +31,7 @@ def send_message(recipients, subject, body, attachmentpath=None):
 		attachment.filename = basename(attachmentpath)
 		attachment.disposition = 'attachment'
 		mail.add_attachment(attachment)
-
+	print(mail.get())
 	response = sg.client.mail.send.post(request_body=mail.get())
 	## Logging
 	print(response.status_code)
