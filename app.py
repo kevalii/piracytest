@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 app.secret_key = urandom(16)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translation'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 # Cookie-related stuff
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = True
