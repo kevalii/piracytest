@@ -15,7 +15,7 @@ def send_message(recipients, subject, body, attachmentpath=None):
 	print(response.body)
 	print(response.headers)
 
-def compose_message:
+def compose_message(recipients, subject, body, attachmentpath):
 	# Set up headers of request
 	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
 	mail = Mail()
