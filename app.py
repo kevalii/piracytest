@@ -10,7 +10,7 @@ from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-UPLOAD_FOLDER = 'usrfiles'
+UPLOAD_FOLDER = app.root_path + '/usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 
 app = Flask(__name__)
