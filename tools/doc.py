@@ -2,6 +2,7 @@ from docx import Document
 
 # Extract and translate most text of a .txt file
 def get_docx(filename):
+	print(filename)
 	doc = Document(filename)
 	for para in doc.paragraphs:
 		para.text = get_translated(escape(para.text).replace('<br>'), '\n')
