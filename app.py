@@ -9,7 +9,6 @@ from tempfile import mkdtemp
 from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
-from docx import Document
 
 UPLOAD_FOLDER = 'usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
