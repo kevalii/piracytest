@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
 from tools.messaging import send_message
 from tools.translate import get_translated
-from tools.doc import get_docx, get_text
+from tools.doc import get_docx, get_text, escape
 from tempfile import mkdtemp
 from os import path, urandom
 from werkzeug.utils import secure_filename
@@ -31,27 +31,7 @@ Session(app)
 heroku = Heroku(app)
 db = SQLAlchemy(app)
 
-# Easiest to include these functions in the main app.py
-# Extract and translate text from the paragraphs of a .docx file
-def get_docx(filename):
-	doc = Document(f'{UPLOAD_FOLDER}/{filename}')
-	for para in doc.paragraphs:
-		para.text = get_translated(escape(para.text))
-	doc.save(f'{UPLOAD_FOLDER}/{filename}')
-
-
-# Extract and translate text of a .txt file
-def get_text(filename):
-	with open(f'{UPLOAD_FOLDER}/{filename}', 'r+') as file:
-		text = file.read()
-		file.seek(0)
-		file.write(get_translated(escape(text)))
-		file.truncate()
-
-
-def escape(text):
-	return text.replace('\n', '<br>')
-
+# Check if a file is of the right extension
 def check_file(filename):
 	ext = path.splitext(filename)[1]
 	if ext in ALLOWED_EXTENSIONS:
@@ -82,7 +62,7 @@ def index():
 	sorted_query = Message.query.order_by(Message.time.desc()).all()
 	data = list()
 	for message in sorted_query:
-		data.append((Markup(message.translation), message.time.strftime('%I:%M %p %A %B %Y')))
+		data.append((Markup(message.translation), message.time.strftime('%I:%M %p %A %d %B %Y')))
 	# Clear message cookie
 	return render_template('index.html', data=data)
 
@@ -154,11 +134,14 @@ def preview():
 			message = session['message']
 		except KeyError:
 			return redirect('preview', code=307)
-		# Translate text and send email 
-		text = message['text']
-		print(message['addressee'])
-		send_message(message['addressee'], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
 
+		# Send email 
+		text = message['text']
+		try:
+			send_message(message['addressee'], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
+		except:
+			flash('Could not send message!')
+			return redirect(url_for('index'))
 		# Commit new Message to database
 		message = Message(text, datetime.now())
 		db.session.add(message)

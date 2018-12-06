@@ -1,5 +1,14 @@
 {% extends "layout.html" %}
 {% block main %}
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul class="flashed">
+			{% for message in messages %}
+				<li>{{ message }}</li>
+			{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
 	<h2><strong>Ahoy me bucko!</strong></h2>
 	<ol>
 		<li>Write a message</li>
