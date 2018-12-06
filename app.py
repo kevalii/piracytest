@@ -91,10 +91,10 @@ def translate():
 		filename = None
 
 		if file:
-			filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 			# Check if extension of file is valid
 			ext = check_file(file.filename)
 			if ext and file.filename != '':
+				filepath = path.join(app.config['UPLOAD_FOLDER'], filename)
 				# Save file
 				filename = secure_filename(file.filename)
 				file.save(filepath)
