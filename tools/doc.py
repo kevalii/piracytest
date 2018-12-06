@@ -5,7 +5,7 @@ def get_docx(filename):
 	print(filename)
 	doc = Document(filename)
 	for para in doc.paragraphs:
-		para.text = get_translated(escape(para.text).replace('<br>', '\n'))
+		para.text = para.text
 	doc.save(filename)
 
 
@@ -16,7 +16,7 @@ def get_text(filename):
 		file.seek(0)
 		# First 'escape' all newlines with <br> then reverse once translated
 		# The translation API doesn't accept newline characters in the request body
-		file.write(get_translated(escape(text)).replace('<br>', '\n'))
+		file.write(text)
 		file.truncate()
 
 # Use to escape newlines

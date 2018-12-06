@@ -2,7 +2,7 @@ from flask import Flask, session, render_template, request, Markup, redirect, ur
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 from flask_heroku import Heroku
-from tools.messaging import send_message
+from tools.old_messaging import compose_message, send_message
 from tools.translate import get_translated
 from tools.doc import get_docx, get_text, escape
 from tempfile import mkdtemp
@@ -19,7 +19,7 @@ ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 app.secret_key = urandom(16)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translation'
 # Cookie-related stuff
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = True
@@ -28,7 +28,7 @@ app.config['SESSION_TYPE'] = 'filesystem'
 Session(app)
 
 # Production env database setup
-heroku = Heroku(app)
+# heroku = Heroku(app)
 db = SQLAlchemy(app)
 
 # Check if a file is of the right extension
@@ -112,7 +112,7 @@ def translate():
 
 		# Save translated message as a cookie
 		try:
-			text = get_translated(escape(text))
+			text = text
 		except KeyError:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
@@ -142,7 +142,8 @@ def preview():
 		# Send email 
 		text = message['text']
 		try:
-			send_message(message['addressee'], 'parcel from ' + message['addresser'], text, path.join(app.config['UPLOAD_FOLDER'], message['file']) if message['file'] is not None else None)
+			msg = compose_message(message['addressee'], 'parcel from ' + message['addresser'], text, path.join(app.config['UPLOAD_FOLDER'], message['file']) if message['file'] is not None else None)
+			send_message(msg)
 		except:
 			flash('Could not send message!')
 			return redirect(url_for('index'))
@@ -156,4 +157,7 @@ def preview():
 
 
 if __name__ == '__main__':
+	message = Message('required', datetime.now())
+	db.session.add(message)
+	db.session.commit()
 	app.run()
