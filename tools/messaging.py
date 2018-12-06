@@ -7,24 +7,25 @@ from base64 import b64encode, decode
 sg = sendgrid.SendGridAPIClient(apikey=environ.get('SENDGRID_API_KEY'))
 
 def send_message(recipients, subject, body, attachmentpath=None):
-	body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
-	mail = Mail(Email("pirate-parceler@book-o-piracy.com"), subject, Email(recipients[0]), body)
+	for recipient in recipients:
+		body = Content('text/html', body + "<br><em>Delivered by Book O' Piracy</em>")
+		mail = Mail(Email("pirate-parceler@book-o-piracy.com"), subject, Email(recipient), body)
 
-	if attachmentpath:
-		attachment = Attachment()
-		filename = basename(attachmentpath)
-		with open(attachmentpath, 'rb') as file:
-			content = file.read()
+		if attachmentpath:
+			attachment = Attachment()
+			filename = basename(attachmentpath)
+			with open(attachmentpath, 'rb') as file:
+				content = file.read()
 
-		# Required encoding
-		attachment.content = b64encode(content).decode()
-		attachment.type = 'application/octet-stream'
-		attachment.filename = basename(attachmentpath)
-		attachment.disposition = 'attachment'
-		mail.add_attachment(attachment)
-
-	response = sg.client.mail.send.post(request_body=mail.get())
-	## Logging
-	print(response.status_code)
-	print(response.body)
-	print(response.headers)
+			# Required encoding
+			attachment.content = b64encode(content).decode()
+			attachment.type = 'application/octet-stream'
+			attachment.filename = basename(attachmentpath)
+			attachment.disposition = 'attachment'
+			mail.add_attachment(attachment)
+		
+		response = sg.client.mail.send.post(request_body=mail.get())
+		## Logging
+		print(response.status_code)
+		print(response.body)
+		print(response.headers)

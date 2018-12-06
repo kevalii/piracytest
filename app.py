@@ -36,7 +36,7 @@ db = SQLAlchemy(app)
 def get_docx(filename):
 	doc = Document(f'{UPLOAD_FOLDER}/{filename}')
 	for para in doc.paragraphs:
-		para.text = get_translated(para.text)
+		para.text = get_translated(escape(para.text))
 	doc.save(f'{UPLOAD_FOLDER}/{filename}')
 
 
@@ -45,7 +45,7 @@ def get_text(filename):
 	with open(f'{UPLOAD_FOLDER}/{filename}', 'r+') as file:
 		text = file.read()
 		file.seek(0)
-		file.write(get_translated(text))
+		file.write(get_translated(escape(text)))
 		file.truncate()
 
 
@@ -77,19 +77,21 @@ class Message(db.Model):
 
 @app.route('/')
 def index():
+	session.pop('message', None)
 	# Get sorted 'messages' table and pass into index.html
 	sorted_query = Message.query.order_by(Message.time.desc()).all()
 	data = list()
 	for message in sorted_query:
-		data.append((Markup(message.translation), str(message.time)))
+		data.append((Markup(message.translation), message.time.strftime('%I:%M %p %A %B %Y')))
 	# Clear message cookie
-	session.pop('message', None)
 	return render_template('index.html', data=data)
 
 
 @app.route('/translate', methods=['GET', 'POST'])
 def translate():
 	if request.method == 'POST':
+		# Clear previous message cookie
+		session.pop('message', None)
 		# Get form inputs and validate
 		text = request.form.get('translation_text')
 		addressee = request.form.get('addressee')
@@ -130,7 +132,7 @@ def translate():
 		except KeyError:
 			flash('Failed to query translation API!')
 			return redirect(url_for('index'))
-		session['message'] = {'text': text, 'addressee': addressee, 'addresser': addresser, 'file': filename}
+		session['message'] = {'text': text, 'addressee': recipients, 'addresser': addresser, 'file': filename}
 
 		return redirect('preview')
 	if request.method == 'GET':
@@ -139,15 +141,16 @@ def translate():
 
 @app.route('/preview', methods=['GET', 'POST'])
 def preview():
-	# Ensures the cookie has loaded
 	if request.method == 'GET':
 		try:
+			# Ensures the cookie has loaded
 			message = session['message']
 		except KeyError:
 			return redirect('preview', code=307)
 		return render_template('preview.html', message=message)
 	if request.method == 'POST':
 		try:
+			# Ensures the cookie has loaded
 			message = session['message']
 		except KeyError:
 			return redirect('preview', code=307)
