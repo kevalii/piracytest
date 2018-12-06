@@ -157,7 +157,7 @@ def preview():
 		# Translate text and send email 
 		text = message['text']
 		print(message['addressee'])
-		send_message([message['addressee']], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
+		send_message(message['addressee'], 'parcel from ' + message['addresser'], text, f"{UPLOAD_FOLDER}/{message['file']}" if message['file'] is not None else None)
 
 		# Commit new Message to database
 		message = Message(text, datetime.now())
