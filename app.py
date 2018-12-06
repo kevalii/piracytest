@@ -10,13 +10,14 @@ from os import path, urandom
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-UPLOAD_FOLDER = '/usrfiles'
+app = Flask(__name__)
+
+UPLOAD_FOLDER = app.root_path + '/usrfiles'
 ALLOWED_EXTENSIONS = set(['.txt', '.docx'])
 
-app = Flask(__name__)
 #### CONFIGS ####
 app.secret_key = urandom(16)
-app.config['UPLOAD_FOLDER'] = app.root_path + UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 # Local db for testing
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/translations'
 # Cookie-related stuff
