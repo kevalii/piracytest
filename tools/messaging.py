@@ -11,11 +11,12 @@ def send_message(recipients, subject, body, attachmentpath=None):
 	mail = Mail()
 	mail.subject = subject
 	mail.from_email = Email("pirate-parceler@book-o-piracy.com")
-
+	print(recipients)
 	personalization = Personalization()
 	for recipient in recipients:
 		personalization.add_to(Email(recipient))
 
+	print(personalization)
 	mail.add_personalization(personalization)
 	mail.add_content(body)
 
