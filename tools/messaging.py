@@ -9,7 +9,7 @@ sg = sendgrid.SendGridAPIClient(apikey=environ.get('SENDGRID_API_KEY'))
 def send_message(recipients, subject, body, attachmentpath=None):
 	# Setting up email 
 	data = compose_message(recipients, subject, body, attachmentpath)
-	response = sg.client.mail.send.post(request_body=mail.get(data))
+	response = sg.client.mail.send.post(request_body=data)
 	## Logging
 	print(response.status_code)
 	print(response.body)

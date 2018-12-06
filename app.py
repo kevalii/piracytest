@@ -141,11 +141,11 @@ def preview():
 
 		# Send email 
 		text = message['text']
-		#try:
-		send_message(message['addressee'], 'parcel from ' + message['addresser'], text, path.join(app.config['UPLOAD_FOLDER'], message['file']) if message['file'] is not None else None)
-		#except:
-			#flash('Could not send message!')
-			#return redirect(url_for('index'))
+		try:
+			send_message(message['addressee'], 'parcel from ' + message['addresser'], text, path.join(app.config['UPLOAD_FOLDER'], message['file']) if message['file'] is not None else None)
+		except:
+			flash('Could not send message!')
+			return redirect(url_for('index'))
 		# Commit new Message to database
 		message = Message(text, datetime.now())
 		db.session.add(message)
